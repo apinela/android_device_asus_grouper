@@ -30,6 +30,7 @@ PRODUCT_COPY_FILES += \
 # These are the hardware-specific features
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/tablet_core_hardware.xml:system/etc/permissions/tablet_core_hardware.xml \
+    frameworks/native/data/etc/android.hardware.bluetooth_le.xml:system/etc/permissions/android.hardware.bluetooth_le.xml \
     frameworks/native/data/etc/android.hardware.camera.front.xml:system/etc/permissions/android.hardware.camera.front.xml \
     frameworks/native/data/etc/android.hardware.ethernet.xml:system/etc/permissions/android.hardware.ethernet.xml \
     frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
@@ -55,7 +56,11 @@ PRODUCT_COPY_FILES += \
 # GPS
 PRODUCT_COPY_FILES += \
     device/asus/grouper/gps/gps.conf:system/etc/gps.conf \
-    device/asus/grouper/gps/gps_daemon.sh:system/bin/gps_daemon.sh
+    device/asus/grouper/gps/gps.xml:system/etc/gps.xml
+
+PRODUCT_PACKAGES += \
+    libgpsd-compat \
+    libstlport
 
 # Wi-Fi
 PRODUCT_PACKAGES += \
@@ -103,9 +108,16 @@ PRODUCT_PACKAGES += \
 
 # Filesystem management tools
 PRODUCT_PACKAGES += \
-    setup_fs
+    fsck.f2fs \
+    mkfs.f2fs
 
-# Media profiles
+# Shell
+ifneq ($(filter eng userdebug,$(TARGET_BUILD_VARIANT)),)
+PRODUCT_PACKAGES += \
+    Terminal
+endif
+
+# Media
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:system/etc/media_codecs_google_audio.xml \
     frameworks/av/media/libstagefright/data/media_codecs_google_telephony.xml:system/etc/media_codecs_google_telephony.xml \
@@ -113,9 +125,12 @@ PRODUCT_COPY_FILES += \
     device/asus/grouper/media/media_profiles.xml:system/etc/media_profiles.xml \
     device/asus/grouper/media/media_codecs.xml:system/etc/media_codecs.xml
 
+PRODUCT_PACKAGES += \
+    libstagefrighthw
+
 # Vendor blobs
 $(call inherit-product, vendor/asus/grouper/asus-vendor.mk)
 $(call inherit-product, vendor/broadcom/grouper/broadcom-vendor.mk)
 $(call inherit-product, vendor/invensense/grouper/invensense-vendor.mk)
 $(call inherit-product, vendor/nvidia/grouper/nvidia-vendor.mk)
-$(call inherit-product, vendor/widevine/grouper/widevine-vendor.mk)
+$(call inherit-product-if-exists, vendor/widevine/arm-generic/widevine-vendor.mk)
