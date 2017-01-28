@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-BOARD_HAL_STATIC_LIBRARIES := libdumpstate.grouper
-
 TARGET_RELEASETOOLS_EXTENSIONS := device/asus/grouper
 
 -include vendor/asus/grouper/BoardConfigVendor.mk
 include device/asus/grouper/BoardConfigCommon.mk
 
-TARGET_RECOVERY_FSTAB = device/asus/grouper/rootdir/fstab.grouper
+TARGET_RECOVERY_FSTAB := device/asus/grouper/rootdir/fstab.grouper
